@@ -11,5 +11,7 @@ namespace CarsMultilayer.CarService.Common
     {
         public List<Car> GetCars();
         public Car CreateCar(Car newCar);
+        public bool DeleteCar(int carId);
+        public Car UpdateCar(int carId, Car updatedCar);
     }
 }

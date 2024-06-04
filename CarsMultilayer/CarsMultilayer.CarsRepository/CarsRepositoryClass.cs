@@ -82,5 +82,60 @@ namespace CarsMultilayer.CarsRepository
                 throw new Exception("Post failed");
             }
         }
+
+        public bool DeleteCar(int carId) 
+        {
+            using var conn = new NpgsqlConnection(cString);
+            conn.Open();
+
+            using var cmd = new NpgsqlCommand(cString, conn);
+
+            cmd.CommandText = "DELETE FROM \"Car\" WHERE \"Id\" = @id";
+
+            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
+
+            int commits = cmd.ExecuteNonQuery();
+
+            if (commits > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Car UpdateCar(int carId, Car updatedCar)
+        {
+            using var conn = new NpgsqlConnection(cString);
+            conn.Open();
+
+            using var cmd = new NpgsqlCommand(cString, conn);
+
+            cmd.CommandText = "UPDATE \"Car\" " +
+                "SET \"CarModel\" = @carModel, \"YearOfMake\" = @year, \"Mileage\" = @mileage, \"Horsepower\" = @hp, \"CarMakeId\" = @carMake" +
+                " WHERE \"Id\" = @id";
+
+            cmd.Parameters.AddWithValue("carModel", NpgsqlTypes.NpgsqlDbType.Text, updatedCar.CarModel);
+            cmd.Parameters.AddWithValue("year", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.YearOfMake);
+            cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Mileage);
+            cmd.Parameters.AddWithValue("hp", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Horsepower);
+            cmd.Parameters.AddWithValue("carMake", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.CarMakeId);
+            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
+
+            int commits = cmd.ExecuteNonQuery();
+
+            conn.Close();
+
+            if (commits > 0)
+            {
+                return updatedCar;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

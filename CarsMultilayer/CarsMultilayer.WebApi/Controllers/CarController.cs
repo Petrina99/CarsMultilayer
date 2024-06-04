@@ -43,6 +43,32 @@ namespace CarsMultilayer.WebApi.Controllers
             }
         }
 
+        [HttpDelete]
+        public IActionResult DeleteCar(int id)
+        {
+            bool result = CarService.DeleteCar(id);
+            if (result) 
+            {
+                return Ok($"Car with id {id} deleted succesfully");
+            } else
+            {
+                return BadRequest($"Unable to delete car with id {id}");
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateCar(int id, [FromBody] Car updatedCar)
+        {
+            Car result = CarService.UpdateCar(id, updatedCar);
+
+            if (result != null)
+            {
+                return Ok($"Car with id {id} updated succesfully");
+            } else
+            {
+                return BadRequest($"Unable to delete car with id {id}");
+            }
+        }
         /*
         [HttpGet("/Car/{id}")]
         public IActionResult GetCar(int id)
@@ -183,63 +209,9 @@ namespace CarsMultilayer.WebApi.Controllers
 
         
 
-        [HttpDelete]
-        public IActionResult DeleteCar(int id)
-        {
-            string connString = Configuration.GetConnectionString("db");
-            using var conn = new NpgsqlConnection(connString);
+        
 
-            conn.Open();
-            using var cmd = new NpgsqlCommand(connString, conn);
-
-            cmd.CommandText = "DELETE FROM \"Car\" WHERE \"Id\" = @id";
-
-            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, id);
-
-            int commits = cmd.ExecuteNonQuery();
-
-            if (commits == 0)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                return Ok();
-            }
-        }
-
-        [HttpPut]
-        public IActionResult UpdateCar(int id, [FromBody] Car updatedCar)
-        {
-            string connString = Configuration.GetConnectionString("db");
-            using var conn = new NpgsqlConnection(connString);
-
-            conn.Open();
-            using var cmd = new NpgsqlCommand(connString, conn);
-
-            cmd.CommandText = "UPDATE \"Car\" " +
-                "SET \"CarModel\" = @carModel, \"YearOfMake\" = @year, \"Mileage\" = @mileage, \"Horsepower\" = @hp, \"CarMakeId\" = @carMake" +
-                " WHERE \"Id\" = @id";
-
-            cmd.Parameters.AddWithValue("carModel", NpgsqlTypes.NpgsqlDbType.Text, updatedCar.CarModel);
-            cmd.Parameters.AddWithValue("year", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.YearOfMake);
-            cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Mileage);
-            cmd.Parameters.AddWithValue("hp", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Horsepower);
-            cmd.Parameters.AddWithValue("carMake", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.CarMakeId);
-            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, id);
-
-            int commits = cmd.ExecuteNonQuery();
-
-            conn.Close();
-            if (commits == 0)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                return Ok(updatedCar);
-            }
-        }
+        
          */
     }
 

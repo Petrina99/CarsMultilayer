@@ -24,5 +24,31 @@ namespace CarsMultilayer.CarService
 
             return carResult;
         }
+
+        public bool DeleteCar(int carId)
+        {
+            bool deleteResult = CarsRepository.DeleteCar(carId);
+
+            if (deleteResult) 
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public Car UpdateCar(int carId, Car updatedCar)
+        {
+            Car result = CarsRepository.UpdateCar(carId, updatedCar);
+
+            if (result != null) 
+            {
+                return result;
+            } else
+            {
+                return null;
+            }
+        }
     }
 }

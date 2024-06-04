@@ -10,14 +10,14 @@ namespace CarsMultilayer.CarsRepository.Common
     {
         public List<Car> GetCars();
         public Car CreateCar(Car car);
-
-        public Car DeleteCar(int id);
+        public bool DeleteCar(int carId);
+        public Car UpdateCar(int carId, Car updatedCar);
         /*
         public Car GetCar(int id);
         public List<CarMakeModelJoin> GetCarsDetailed();
         public CarMakeModelJoin GetCarDetailed(int id);
         
         
-        public Car updateCar(int id, Car updatedCar);*/
+        */
     }
 }
