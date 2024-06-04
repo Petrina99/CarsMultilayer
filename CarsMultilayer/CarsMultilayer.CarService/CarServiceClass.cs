@@ -50,5 +50,23 @@ namespace CarsMultilayer.CarService
                 return null;
             }
         }
+
+        public Car GetCar(int carId) 
+        {
+            Car result = CarsRepository.GetCar(carId);
+            return result;
+        }
+
+        public List<CarMakeModelJoin> GetCarsDetailed()
+        {
+            List<CarMakeModelJoin> result = CarsRepository.GetCarsDetailed();
+            return result;
+        }
+
+        public CarMakeModelJoin GetCarDetailed(int carId)
+        {
+            CarMakeModelJoin result = CarsRepository.GetCarDetailed(carId);
+            return result;
+        }
     }
 }

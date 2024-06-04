@@ -137,5 +137,117 @@ namespace CarsMultilayer.CarsRepository
                 return null;
             }
         }
+
+        public Car GetCar(int carId)
+        {
+            using var conn = new NpgsqlConnection(cString);
+            conn.Open();
+
+            using var cmd = new NpgsqlCommand(cString, conn);
+
+            cmd.CommandText = "SELECT * FROM \"Car\" WHERE \"Id\" = @id";
+
+            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
+            using var reader = cmd.ExecuteReader();
+
+            Car fetchedCar = new Car();
+            while (reader.Read())
+            {
+                try
+                {
+                    fetchedCar.Id = (int)reader[0];
+                    fetchedCar.CarMakeId = (int)reader["CarMakeId"];
+                    fetchedCar.CarModel = reader[1].ToString();
+                    fetchedCar.YearOfMake = (int)reader[2];
+                    fetchedCar.Mileage = (int)reader[3];
+                    fetchedCar.Horsepower = (int)reader[4];
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+
+            conn.Close();
+
+            return fetchedCar;
+        }
+
+        public List<CarMakeModelJoin> GetCarsDetailed()
+        {
+            using var conn = new NpgsqlConnection(cString);
+            conn.Open();
+
+            using var cmd = new NpgsqlCommand(cString, conn);
+
+            cmd.CommandText = $"SELECT * FROM \"Car\" c INNER JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\"";
+
+            using var reader = cmd.ExecuteReader();
+
+            List<CarMakeModelJoin> joinResult = new List<CarMakeModelJoin> ();
+
+            while (reader.Read())
+            {
+                try
+                {
+                    CarMakeModelJoin join = new CarMakeModelJoin();
+                    join.CarId = (int)reader[0];
+                    join.CarModel = (string)reader[1];
+                    join.YearOfMake = (int)reader[2];
+                    join.Mileage = (int)reader[3];
+                    join.Horsepower = (int)reader[4];
+                    join.MakeId = (int)reader[7];
+                    join.MakeName = (string)reader[8];
+                    join.MakeCountry = (string)reader[9];
+
+                    joinResult.Add(join);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+
+            conn.Close();
+
+
+            return joinResult;
+        }
+
+        public CarMakeModelJoin GetCarDetailed(int carId)
+        {
+            using var conn = new NpgsqlConnection(cString);
+            conn.Open();
+
+            using var cmd = new NpgsqlCommand(cString, conn);
+
+            cmd.CommandText = "SELECT * FROM \"Car\" c FULL JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\" where c.\"Id\" = @id";
+
+            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
+            using var reader = cmd.ExecuteReader();
+
+            CarMakeModelJoin joinResult = new CarMakeModelJoin();
+
+            while (reader.Read())
+            {
+                try
+                {
+                    joinResult.CarId = (int)reader[0];
+                    joinResult.CarModel = (string)reader[1];
+                    joinResult.YearOfMake = (int)reader[2];
+                    joinResult.Mileage = (int)reader[3];
+                    joinResult.Horsepower = (int)reader[4];
+                    joinResult.MakeId = (int)reader[7];
+                    joinResult.MakeName = (string)reader[8];
+                    joinResult.MakeCountry = (string)reader[9];
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+
+            return joinResult;
+        }
     }
 }
