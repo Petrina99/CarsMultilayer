@@ -7,11 +7,21 @@ namespace CarsMultilayer.CarService
 {
     public class CarServiceClass : ICarService
     {
+        public ICarsRepository CarsRepository = new CarsRepositoryClass();
+
+        public CarServiceClass() { }
+
         public List<Car> GetCars()
         {
-            ICarsRepository carRepository = new CarsRepositoryClass();
-            List<Car> carResult = carRepository.GetCars();
+            List<Car> carResult = CarsRepository.GetCars();
             
+            return carResult;
+        }
+
+        public Car CreateCar(Car newCar) 
+        {
+            Car carResult = CarsRepository.CreateCar(newCar);
+
             return carResult;
         }
     }

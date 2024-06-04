@@ -58,7 +58,29 @@ namespace CarsMultilayer.CarsRepository
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
 
+            using var cmd = new NpgsqlCommand(cString, conn);
+            cmd.CommandText = "INSERT INTO \"Car\" (\"CarModel\", \"YearOfMake\"," +
+                " \"Mileage\", \"Horsepower\", \"CarMakeId\") values (@model, @yearOfMake, " +
+                "@mileage, @horsepower, @makeId)";
 
+            cmd.Parameters.AddWithValue("model", NpgsqlTypes.NpgsqlDbType.Text, newCar.CarModel);
+            cmd.Parameters.AddWithValue("yearOfMake", NpgsqlTypes.NpgsqlDbType.Integer, newCar.YearOfMake);
+            cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, newCar.Mileage);
+            cmd.Parameters.AddWithValue("horsepower", NpgsqlTypes.NpgsqlDbType.Integer, newCar.Horsepower);
+            cmd.Parameters.AddWithValue("makeId", NpgsqlTypes.NpgsqlDbType.Integer, newCar.CarMakeId);
+
+            int commits = cmd.ExecuteNonQuery();
+
+            conn.Close();
+
+            if (commits > 0)
+            {
+                return newCar;
+            }
+            else
+            {
+                throw new Exception("Post failed");
+            }
         }
     }
 }

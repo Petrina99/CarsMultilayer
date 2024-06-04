@@ -11,13 +11,12 @@ namespace CarsMultilayer.WebApi.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
+        public CarServiceClass CarService = new CarServiceClass();
 
         [HttpGet]
         public IActionResult GetCars()
         {
-            CarServiceClass carServiceClass = new CarServiceClass();
-
-            List<Car> carResult = carServiceClass.GetCars();
+            List<Car> carResult = CarService.GetCars();
 
             if (carResult == null)
             {
@@ -32,13 +31,14 @@ namespace CarsMultilayer.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateCar([FromBody] Car newCar)
         {
-            if (commits == 0)
+            Car carResult = CarService.CreateCar(newCar);
+            
+            if (carResult == null)
             {
                 return BadRequest("Error adding a car");
             }
             else
             {
-
                 return Ok(newCar);
             }
         }

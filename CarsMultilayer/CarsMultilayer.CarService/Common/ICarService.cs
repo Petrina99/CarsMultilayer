@@ -10,5 +10,6 @@ namespace CarsMultilayer.CarService.Common
     public interface ICarService
     {
         public List<Car> GetCars();
+        public Car CreateCar(Car newCar);
     }
 }
