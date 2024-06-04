@@ -28,6 +28,21 @@ namespace CarsMultilayer.WebApi.Controllers
             }
         }
 
+        [HttpGet("/Car/{id}")]
+        public IActionResult GetCar(int id)
+        {
+            Car carResult = CarService.GetCar(id);
+
+            if (carResult == null)
+            {
+                return BadRequest($"Car with id {id} not found");
+            }
+            else
+            {
+                return Ok(carResult);
+            }
+        }
+
         [HttpPost]
         public IActionResult CreateCar([FromBody] Car newCar)
         {
@@ -69,150 +84,37 @@ namespace CarsMultilayer.WebApi.Controllers
                 return BadRequest($"Unable to delete car with id {id}");
             }
         }
-        /*
-        [HttpGet("/Car/{id}")]
-        public IActionResult GetCar(int id)
-        {
-            string connString = Configuration.GetConnectionString("db");
-            using var conn = new NpgsqlConnection(connString);
-
-            conn.Open();
-            using var cmd = new NpgsqlCommand(connString, conn);
-
-            cmd.CommandText = "SELECT * FROM \"Car\" WHERE \"Id\" = @id";
-
-            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, id);
-            using var reader = cmd.ExecuteReader();
-
-            Car fetchedCar = new Car();
-            while (reader.Read())
-            {
-                try
-                {
-                    fetchedCar.Id = (int)reader[0];
-                    fetchedCar.CarMakeId = (int)reader["CarMakeId"];
-                    fetchedCar.CarModel = reader[1].ToString();
-                    fetchedCar.YearOfMake = (int)reader[2];
-                    fetchedCar.Mileage = (int)reader[3];
-                    fetchedCar.Horsepower = (int)reader[4];
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-
-            conn.Close();
-
-            if (fetchedCar == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(fetchedCar);
-            }
-        }
-
+        
+        
         [HttpGet("/Car/Detailed")]
         public IActionResult GetCarAndMake()
         {
-            string connString = this.Configuration.GetConnectionString("db");
-            using var conn = new NpgsqlConnection(connString);
+            List<CarMakeModelJoin> result = CarService.GetCarsDetailed();
 
-            conn.Open();
-
-            using var cmd = new NpgsqlCommand(connString, conn);
-            cmd.CommandText = $"SELECT * FROM \"Car\" c FULL JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\"";
-
-            using var reader = cmd.ExecuteReader();
-
-            List<CarMakeCarModelJoin> joinResult = new List<CarMakeCarModelJoin>();
-
-            while (reader.Read())
+            if (result == null)
             {
-                try
-                {
-                    CarMakeCarModelJoin join = new CarMakeCarModelJoin();
-                    join.CarId = (int)reader[0];
-                    join.CarModel = (string)reader[1];
-                    join.YearOfMake = (int)reader[2];
-                    join.Mileage = (int)reader[3];
-                    join.Horsepower = (int)reader[4];
-                    join.MakeId = (int)reader[7];
-                    join.MakeName = (string)reader[8];
-                    join.MakeCountry = (string)reader[9];
-
-                    joinResult.Add(join);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            conn.Close();
-
-            if (joinResult.Count > 0)
+                return BadRequest("No cars found");
+            } else
             {
-                return Ok(joinResult);
-            }
-            else
-            {
-                return BadRequest();
+                return Ok(result);
             }
         }
 
         [HttpGet("/Car/Detailed/{id}")]
         public IActionResult GetCarDetailed(int id)
         {
-            string connString = Configuration.GetConnectionString("db");
-            using var conn = new NpgsqlConnection(connString);
+            CarMakeModelJoin result = CarService.GetCarDetailed(id);
 
-            conn.Open();
-            using var cmd = new NpgsqlCommand(connString, conn);
-
-            cmd.CommandText = "SELECT * FROM \"Car\" c FULL JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\" where c.\"Id\" = @id";
-
-            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, id);
-            using var reader = cmd.ExecuteReader();
-
-            CarMakeCarModelJoin joinResult = new CarMakeCarModelJoin();
-
-            while (reader.Read())
+            if (result == null)
             {
-                try
-                {
-                    joinResult.CarId = (int)reader[0];
-                    joinResult.CarModel = (string)reader[1];
-                    joinResult.YearOfMake = (int)reader[2];
-                    joinResult.Mileage = (int)reader[3];
-                    joinResult.Horsepower = (int)reader[4];
-                    joinResult.MakeId = (int)reader[7];
-                    joinResult.MakeName = (string)reader[8];
-                    joinResult.MakeCountry = (string)reader[9];
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-
-            if (joinResult == null)
-            {
-                return BadRequest();
+                return BadRequest($"No car with id {id} found");
             }
             else
             {
-                return Ok(joinResult);
+                return Ok(result);
             }
+
         }
-
-        
-
-        
-
-        
-         */
     }
 
 }
