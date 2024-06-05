@@ -15,7 +15,7 @@ namespace CarsMultilayer.CarsRepository
             cString = comm.ConnString;
         }
 
-        public List<Car> GetCars()
+        public async Task<List<Car>> GetCarsAsync()
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -23,7 +23,7 @@ namespace CarsMultilayer.CarsRepository
             using var cmd = new NpgsqlCommand(cString, conn);
             cmd.CommandText = $"SELECT * FROM \"Car\"";
 
-            using var reader = cmd.ExecuteReader();
+            await using var reader = await cmd.ExecuteReaderAsync();
 
             var carResult = new List<Car>();
 
@@ -53,7 +53,7 @@ namespace CarsMultilayer.CarsRepository
             return carResult;
         }
 
-        public Car CreateCar(Car newCar)
+        public async Task<Car> CreateCarAsync(Car newCar)
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -69,7 +69,7 @@ namespace CarsMultilayer.CarsRepository
             cmd.Parameters.AddWithValue("horsepower", NpgsqlTypes.NpgsqlDbType.Integer, newCar.Horsepower);
             cmd.Parameters.AddWithValue("makeId", NpgsqlTypes.NpgsqlDbType.Integer, newCar.CarMakeId);
 
-            int commits = cmd.ExecuteNonQuery();
+            int commits = await cmd.ExecuteNonQueryAsync();
 
             conn.Close();
 
@@ -83,7 +83,7 @@ namespace CarsMultilayer.CarsRepository
             }
         }
 
-        public bool DeleteCar(int carId) 
+        public async Task<bool> DeleteCarAsync(int carId) 
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -94,7 +94,7 @@ namespace CarsMultilayer.CarsRepository
 
             cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
 
-            int commits = cmd.ExecuteNonQuery();
+            int commits = await cmd.ExecuteNonQueryAsync();
 
             if (commits > 0)
             {
@@ -106,7 +106,7 @@ namespace CarsMultilayer.CarsRepository
             }
         }
 
-        public Car UpdateCar(int carId, Car updatedCar)
+        public async Task<Car> UpdateCarAsync(int carId, Car updatedCar)
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -124,7 +124,7 @@ namespace CarsMultilayer.CarsRepository
             cmd.Parameters.AddWithValue("carMake", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.CarMakeId);
             cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
 
-            int commits = cmd.ExecuteNonQuery();
+            int commits = await cmd.ExecuteNonQueryAsync();
 
             conn.Close();
 
@@ -138,7 +138,7 @@ namespace CarsMultilayer.CarsRepository
             }
         }
 
-        public Car GetCar(int carId)
+        public async Task<Car> GetCarAsync(int carId)
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -148,7 +148,7 @@ namespace CarsMultilayer.CarsRepository
             cmd.CommandText = "SELECT * FROM \"Car\" WHERE \"Id\" = @id";
 
             cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
-            using var reader = cmd.ExecuteReader();
+            using var reader = await cmd.ExecuteReaderAsync();
 
             Car fetchedCar = new Car();
             while (reader.Read())
@@ -173,7 +173,7 @@ namespace CarsMultilayer.CarsRepository
             return fetchedCar;
         }
 
-        public List<CarMakeModelJoin> GetCarsDetailed()
+        public async Task<List<CarMakeModelJoin>> GetCarsDetailedAsync()
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -182,7 +182,7 @@ namespace CarsMultilayer.CarsRepository
 
             cmd.CommandText = $"SELECT * FROM \"Car\" c INNER JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\"";
 
-            using var reader = cmd.ExecuteReader();
+            using var reader = await cmd.ExecuteReaderAsync();
 
             List<CarMakeModelJoin> joinResult = new List<CarMakeModelJoin> ();
 
@@ -214,7 +214,7 @@ namespace CarsMultilayer.CarsRepository
             return joinResult;
         }
 
-        public CarMakeModelJoin GetCarDetailed(int carId)
+        public async Task<CarMakeModelJoin> GetCarDetailedAsync(int carId)
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
@@ -224,7 +224,7 @@ namespace CarsMultilayer.CarsRepository
             cmd.CommandText = "SELECT * FROM \"Car\" c FULL JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\" where c.\"Id\" = @id";
 
             cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
-            using var reader = cmd.ExecuteReader();
+            using var reader = await cmd.ExecuteReaderAsync();
 
             CarMakeModelJoin joinResult = new CarMakeModelJoin();
 
