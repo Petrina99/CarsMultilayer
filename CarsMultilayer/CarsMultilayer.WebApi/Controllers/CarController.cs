@@ -14,9 +14,9 @@ namespace CarsMultilayer.WebApi.Controllers
         public CarServiceClass CarService = new CarServiceClass();
 
         [HttpGet]
-        public IActionResult GetCars()
+        public async Task<IActionResult> GetCarsAsync()
         {
-            List<Car> carResult = CarService.GetCars();
+            List<Car> carResult = await CarService.GetCarsAsync();
 
             if (carResult == null)
             {
@@ -29,9 +29,9 @@ namespace CarsMultilayer.WebApi.Controllers
         }
 
         [HttpGet("/Car/{id}")]
-        public IActionResult GetCar(int id)
+        public async Task<IActionResult> GetCarAsync(int id)
         {
-            Car carResult = CarService.GetCar(id);
+            Car carResult = await CarService.GetCarAsync(id);
 
             if (carResult == null)
             {
@@ -44,9 +44,9 @@ namespace CarsMultilayer.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCar([FromBody] Car newCar)
+        public async Task<IActionResult> CreateCarAsync([FromBody] Car newCar)
         {
-            Car carResult = CarService.CreateCar(newCar);
+            Car carResult = await CarService.CreateCarAsync(newCar);
             
             if (carResult == null)
             {
@@ -59,9 +59,9 @@ namespace CarsMultilayer.WebApi.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteCar(int id)
+        public async Task<IActionResult> DeleteCarAsync(int id)
         {
-            bool result = CarService.DeleteCar(id);
+            bool result = await CarService.DeleteCarAsync(id);
             if (result) 
             {
                 return Ok($"Car with id {id} deleted succesfully");
@@ -72,9 +72,9 @@ namespace CarsMultilayer.WebApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateCar(int id, [FromBody] Car updatedCar)
+        public async Task<IActionResult> UpdateCarAsync(int id, [FromBody] Car updatedCar)
         {
-            Car result = CarService.UpdateCar(id, updatedCar);
+            Car result = await CarService.UpdateCarAsync(id, updatedCar);
 
             if (result != null)
             {
@@ -87,9 +87,9 @@ namespace CarsMultilayer.WebApi.Controllers
         
         
         [HttpGet("/Car/Detailed")]
-        public IActionResult GetCarAndMake()
+        public async Task<IActionResult> GetCarsDetailedAsync()
         {
-            List<CarMakeModelJoin> result = CarService.GetCarsDetailed();
+            List<CarMakeModelJoin> result = await CarService.GetCarsDetailedAsync();
 
             if (result == null)
             {
@@ -101,9 +101,9 @@ namespace CarsMultilayer.WebApi.Controllers
         }
 
         [HttpGet("/Car/Detailed/{id}")]
-        public IActionResult GetCarDetailed(int id)
+        public async Task<IActionResult> GetCarDetailedAsync(int id)
         {
-            CarMakeModelJoin result = CarService.GetCarDetailed(id);
+            CarMakeModelJoin result = await CarService.GetCarDetailedAsync(id);
 
             if (result == null)
             {

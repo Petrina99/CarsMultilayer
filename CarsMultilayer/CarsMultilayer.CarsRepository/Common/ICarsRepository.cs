@@ -8,12 +8,12 @@ namespace CarsMultilayer.CarsRepository.Common
 {
     public interface ICarsRepository
     {
-        public List<Car> GetCars();
-        public Car CreateCar(Car car);
-        public bool DeleteCar(int carId);
-        public Car UpdateCar(int carId, Car updatedCar);
-        public Car GetCar(int carId);
-        public List<CarMakeModelJoin> GetCarsDetailed();
-        public CarMakeModelJoin GetCarDetailed(int carId);
+        public Task<List<Car>> GetCarsAsync();
+        public Task<Car> CreateCarAsync(Car car);
+        public Task<bool> DeleteCarAsync(int carId);
+        public Task<Car> UpdateCarAsync(int carId, Car updatedCar);
+        public Task<Car> GetCarAsync(int carId);
+        public Task<List<CarMakeModelJoin>> GetCarsDetailedAsync();
+        public Task<CarMakeModelJoin> GetCarDetailedAsync(int carId);
     }
 }
