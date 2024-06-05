@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarsMultilayer.CarService\CarsMultilayer.CarService.csproj" />
+    <ProjectReference Include="..\CarsMultilayer.Common\CarsMultilayer.Common.csproj" />
     <ProjectReference Include="..\CarsMultilayer.Model\CarsMultilayer.Model.csproj" />
   </ItemGroup>
 

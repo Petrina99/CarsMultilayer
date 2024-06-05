@@ -2,6 +2,7 @@
 using CarsMultilayer.Model;
 using CarsMultilayer.CarsRepository;
 using CarsMultilayer.CarsRepository.Common;
+using CarsMultilayer.Common;
 
 namespace CarsMultilayer.CarService
 {
@@ -11,9 +12,9 @@ namespace CarsMultilayer.CarService
 
         public CarServiceClass() { }
 
-        public async Task<List<Car>> GetCarsAsync()
+        public async Task<List<Car>> GetCarsAsync(CarFilter filter, Paging paging, Sorting sorting)
         {
-            List<Car> carResult = await CarsRepository.GetCarsAsync();
+            List<Car> carResult = await CarsRepository.GetCarsAsync(filter, paging, sorting);
             
             return carResult;
         }

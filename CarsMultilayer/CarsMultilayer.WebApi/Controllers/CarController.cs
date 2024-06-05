@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using CarsMultilayer.Model;
 using CarsMultilayer.CarService;
 using Npgsql;
+using CarsMultilayer.Common;
 
 namespace CarsMultilayer.WebApi.Controllers
 {
@@ -14,9 +15,25 @@ namespace CarsMultilayer.WebApi.Controllers
         public CarServiceClass CarService = new CarServiceClass();
 
         [HttpGet]
-        public async Task<IActionResult> GetCarsAsync()
+        public async Task<IActionResult> GetCarsAsync
+            (
+                int? carMakeId = null, string? carModel = null,
+                int? yearOfCar = null, int? minMiles = null, int? maxMiles = null,
+                int? minHp = null, int? maxHp = null, decimal? minPrice = null, 
+                decimal? maxPrice = null, DateTime? dateStart = null, 
+                DateTime? dateEnd = null, int pageSize = 3, int pageNumber = 1, 
+                string orderBy = "Price", string sortOrder = "ASC"
+            )
         {
-            List<Car> carResult = await CarService.GetCarsAsync();
+            Console.WriteLine(yearOfCar);
+            CarFilter filter = new CarFilter(
+                carMakeId, carModel, yearOfCar, minMiles, maxMiles,
+                minHp, maxHp, minPrice, maxPrice, dateStart, dateEnd
+            );
+            Paging paging = new Paging(pageSize, pageNumber);
+            Sorting sorting = new Sorting(orderBy, sortOrder);
+            
+            List<Car> carResult = await CarService.GetCarsAsync(filter, paging, sorting);
 
             if (carResult == null)
             {

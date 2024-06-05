@@ -2,6 +2,8 @@
 using CarsMultilayer.Model;
 using CarsMultilayer.Common;
 using Npgsql;
+using System.Text;
+using System.Reflection;
 
 namespace CarsMultilayer.CarsRepository
 {
@@ -15,14 +17,97 @@ namespace CarsMultilayer.CarsRepository
             cString = comm.ConnString;
         }
 
-        public async Task<List<Car>> GetCarsAsync()
+        private static string QueryBuilder(CarFilter filter, Sorting sorting, Paging paging, NpgsqlCommand cmd) {
+            StringBuilder sb = new StringBuilder("SELECT * FROM \"Car\" WHERE 1=1");
+
+            if (filter.CarMakeId != null)
+            {
+                sb.Append(" AND \"CarMakeId\" = @makeId");
+                cmd.Parameters.AddWithValue("makeId", filter.CarMakeId);
+            }
+                
+            if (filter.CarModel != null)
+            {
+                sb.Append(" AND \"CarModel\" = @model");
+                cmd.Parameters.AddWithValue("model", filter.CarModel);
+            }
+
+            if (filter.Year != null)
+            {
+                sb.Append(" AND \"YearOfMake\" = @year");
+                cmd.Parameters.AddWithValue("year", (int)filter.Year);
+            }
+
+            if (filter.MinMiles != null)
+            {
+                sb.Append($" AND \"Mileage\" > @minMiles");
+                cmd.Parameters.AddWithValue("minMiles", filter.MinMiles);
+            }
+
+            if (filter.MaxMiles != null)
+            {
+                sb.Append(" AND \"Mileage\" < @maxMiles");
+                cmd.Parameters.AddWithValue("maxMiles", filter.MaxMiles);
+            }
+
+            if (filter.MinHorsepower != null)
+            {
+                sb.Append(" AND \"Horsepower\" > @minHp");
+                cmd.Parameters.AddWithValue("minHp", filter.MinHorsepower);
+            }
+
+            if (filter.MaxHorsepower != null)
+            {
+                sb.Append(" AND \"Horsepower\" < @maxHp");
+                cmd.Parameters.AddWithValue("maxHp", filter.MaxHorsepower);
+            }
+
+            if (filter.MinPrice != null)
+            {
+                sb.Append(" AND \"Price\" > @minPrice");
+                cmd.Parameters.AddWithValue("minPrice", filter.MinPrice);
+            }
+
+            if (filter.MaxPrice != null)
+            {
+                sb.Append(" AND \"Price\" < @maxPrice");
+                cmd.Parameters.AddWithValue("maxPrice", filter.MaxPrice);
+            }
+
+            if (filter.DateStart != null)
+            {
+                sb.Append(" AND \"DateCreated\" > @dateStart");
+                cmd.Parameters.AddWithValue("dateStart", filter.DateStart);
+            }
+
+            if (filter.DateEnd != null)
+            {
+                sb.Append(" AND \"DateCreated\" < @dateEnd");
+                cmd.Parameters.AddWithValue("dateEnd", filter.DateEnd);
+            }
+
+            sb.Append($" ORDER BY \"{sorting.OrderBy}\" {sorting.SortOrder}");
+          
+            int offsetNum = paging.PageNumber == 1 ? 0 : paging.PageSize * (paging.PageNumber - 1);
+         
+            sb.Append(" LIMIT @pageSize");
+            cmd.Parameters.AddWithValue("pageSize", paging.PageSize);
+
+            sb.Append(" OFFSET @offsetNum;");
+            cmd.Parameters.AddWithValue("offsetNum", offsetNum);
+
+            return sb.ToString();
+        }
+
+        public async Task<List<Car>> GetCarsAsync(CarFilter filter, Paging paging, Sorting sorting)
         {
             using var conn = new NpgsqlConnection(cString);
             conn.Open();
 
             using var cmd = new NpgsqlCommand(cString, conn);
-            cmd.CommandText = $"SELECT * FROM \"Car\"";
-
+            cmd.CommandText = QueryBuilder(filter, sorting, paging, cmd);
+            Console.WriteLine(cmd.CommandText);
+            Console.WriteLine(sorting.SortOrder);
             await using var reader = await cmd.ExecuteReaderAsync();
 
             var carResult = new List<Car>();
@@ -31,16 +116,23 @@ namespace CarsMultilayer.CarsRepository
             {
                 try
                 {
-                    carResult.Add(
-                        new Car(
-                            id: (int)reader[0],
-                            carMakeId: (int)reader["CarMakeId"],
-                            carModel: reader[1].ToString(),
-                            yearOfMake: (int)reader[2],
-                            mileage: (int)reader[3],
-                            horsepower: (int)reader[4]
-                        )
-                    );
+                    if ((bool)reader[8] == true) 
+                    { 
+                        carResult.Add(
+                            new Car(
+                                id: (int)reader[0],
+                                carMakeId: (int)reader["CarMakeId"],
+                                carModel: reader[1].ToString(),
+                                yearOfMake: (int)reader[2],
+                                mileage: (int)reader[3],
+                                horsepower: (int)reader[4],
+                                price: (decimal)reader[5],
+                                dateCreated: (DateTime)reader[6],
+                                dateUpdated: (DateTime)reader[7],
+                                isActive: (bool)reader[8]
+                            )
+                        );
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -60,14 +152,15 @@ namespace CarsMultilayer.CarsRepository
 
             using var cmd = new NpgsqlCommand(cString, conn);
             cmd.CommandText = "INSERT INTO \"Car\" (\"CarModel\", \"YearOfMake\"," +
-                " \"Mileage\", \"Horsepower\", \"CarMakeId\") values (@model, @yearOfMake, " +
-                "@mileage, @horsepower, @makeId)";
+                " \"Mileage\", \"Horsepower\", \"CarMakeId\", \"Price\") values (@model, @yearOfMake, " +
+                "@mileage, @horsepower, @makeId, @price)";
 
             cmd.Parameters.AddWithValue("model", NpgsqlTypes.NpgsqlDbType.Text, newCar.CarModel);
             cmd.Parameters.AddWithValue("yearOfMake", NpgsqlTypes.NpgsqlDbType.Integer, newCar.YearOfMake);
             cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, newCar.Mileage);
             cmd.Parameters.AddWithValue("horsepower", NpgsqlTypes.NpgsqlDbType.Integer, newCar.Horsepower);
             cmd.Parameters.AddWithValue("makeId", NpgsqlTypes.NpgsqlDbType.Integer, newCar.CarMakeId);
+            cmd.Parameters.AddWithValue("price", NpgsqlTypes.NpgsqlDbType.Numeric, newCar.Price);
 
             int commits = await cmd.ExecuteNonQueryAsync();
 
@@ -90,11 +183,16 @@ namespace CarsMultilayer.CarsRepository
 
             using var cmd = new NpgsqlCommand(cString, conn);
 
-            cmd.CommandText = "DELETE FROM \"Car\" WHERE \"Id\" = @id";
+            cmd.CommandText = "UPDATE \"Car\" SET \"IsActive\" = @boolValue WHERE \"Id\" = @id";
 
-            cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
+            Console.WriteLine(cmd.CommandText);
+            cmd.Parameters.AddWithValue("boolValue", false);
+            cmd.Parameters.AddWithValue("id", carId);
 
+            
             int commits = await cmd.ExecuteNonQueryAsync();
+
+            conn.Close();
 
             if (commits > 0)
             {
