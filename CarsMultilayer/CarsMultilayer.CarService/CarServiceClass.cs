@@ -11,23 +11,23 @@ namespace CarsMultilayer.CarService
 
         public CarServiceClass() { }
 
-        public List<Car> GetCars()
+        public async Task<List<Car>> GetCarsAsync()
         {
-            List<Car> carResult = CarsRepository.GetCars();
+            List<Car> carResult = await CarsRepository.GetCarsAsync();
             
             return carResult;
         }
 
-        public Car CreateCar(Car newCar) 
+        public async Task<Car> CreateCarAsync(Car newCar) 
         {
-            Car carResult = CarsRepository.CreateCar(newCar);
+            Car carResult = await CarsRepository.CreateCarAsync(newCar);
 
             return carResult;
         }
 
-        public bool DeleteCar(int carId)
+        public async Task<bool> DeleteCarAsync(int carId)
         {
-            bool deleteResult = CarsRepository.DeleteCar(carId);
+            bool deleteResult = await CarsRepository.DeleteCarAsync(carId);
 
             if (deleteResult) 
             {
@@ -38,9 +38,9 @@ namespace CarsMultilayer.CarService
             }
         }
 
-        public Car UpdateCar(int carId, Car updatedCar)
+        public async Task<Car> UpdateCarAsync(int carId, Car updatedCar)
         {
-            Car result = CarsRepository.UpdateCar(carId, updatedCar);
+            Car result = await CarsRepository.UpdateCarAsync(carId, updatedCar);
 
             if (result != null) 
             {
@@ -51,21 +51,21 @@ namespace CarsMultilayer.CarService
             }
         }
 
-        public Car GetCar(int carId) 
+        public async Task<Car> GetCarAsync(int carId) 
         {
-            Car result = CarsRepository.GetCar(carId);
+            Car result = await CarsRepository.GetCarAsync(carId);
             return result;
         }
 
-        public List<CarMakeModelJoin> GetCarsDetailed()
+        public async Task<List<CarMakeModelJoin>> GetCarsDetailedAsync()
         {
-            List<CarMakeModelJoin> result = CarsRepository.GetCarsDetailed();
+            List<CarMakeModelJoin> result = await CarsRepository.GetCarsDetailedAsync();
             return result;
         }
 
-        public CarMakeModelJoin GetCarDetailed(int carId)
+        public async Task<CarMakeModelJoin> GetCarDetailedAsync(int carId)
         {
-            CarMakeModelJoin result = CarsRepository.GetCarDetailed(carId);
+            CarMakeModelJoin result = await CarsRepository.GetCarDetailedAsync(carId);
             return result;
         }
     }

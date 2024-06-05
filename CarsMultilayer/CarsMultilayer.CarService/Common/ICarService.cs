@@ -9,12 +9,12 @@ namespace CarsMultilayer.CarService.Common
 {
     public interface ICarService
     {
-        public List<Car> GetCars();
-        public Car CreateCar(Car newCar);
-        public bool DeleteCar(int carId);
-        public Car UpdateCar(int carId, Car updatedCar);
-        public Car GetCar(int carId);
-        public List<CarMakeModelJoin> GetCarsDetailed();
-        public CarMakeModelJoin GetCarDetailed(int carId);
+        public Task<List<Car>> GetCarsAsync();
+        public Task<Car> CreateCarAsync(Car newCar);
+        public Task<bool> DeleteCarAsync(int carId);
+        public Task<Car> UpdateCarAsync(int carId, Car updatedCar);
+        public Task<Car> GetCarAsync(int carId);
+        public Task<List<CarMakeModelJoin>> GetCarsDetailedAsync();
+        public Task<CarMakeModelJoin> GetCarDetailedAsync(int carId);
     }
 }
