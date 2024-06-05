@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarsMultilayer.CarsRepository\CarsMultilayer.CarsRepository.csproj" />
+    <ProjectReference Include="..\CarsMultilayer.Common\CarsMultilayer.Common.csproj" />
     <ProjectReference Include="..\CarsMultilayer.Model\CarsMultilayer.Model.csproj" />
   </ItemGroup>
 
