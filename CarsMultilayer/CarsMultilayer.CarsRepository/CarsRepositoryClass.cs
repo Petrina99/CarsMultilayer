@@ -9,12 +9,11 @@ namespace CarsMultilayer.CarsRepository
 {
     public class CarsRepositoryClass : ICarsRepository
     {
-        private string cString {  get; set; }
+        private readonly string _connectionString;
 
-        public CarsRepositoryClass() 
+        public CarsRepositoryClass(string connectionString) 
         {
-            CommonClass comm = new CommonClass();
-            cString = comm.ConnString;
+            _connectionString = connectionString;
         }
 
         private static string QueryBuilder(CarFilter filter, Sorting sorting, Paging paging, NpgsqlCommand cmd) {
@@ -101,10 +100,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<List<Car>> GetCarsAsync(CarFilter filter, Paging paging, Sorting sorting)
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
             cmd.CommandText = QueryBuilder(filter, sorting, paging, cmd);
             Console.WriteLine(cmd.CommandText);
             Console.WriteLine(sorting.SortOrder);
@@ -147,10 +146,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<Car> CreateCarAsync(Car newCar)
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
             cmd.CommandText = "INSERT INTO \"Car\" (\"CarModel\", \"YearOfMake\"," +
                 " \"Mileage\", \"Horsepower\", \"CarMakeId\", \"Price\") values (@model, @yearOfMake, " +
                 "@mileage, @horsepower, @makeId, @price)";
@@ -178,10 +177,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<bool> DeleteCarAsync(int carId) 
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
 
             cmd.CommandText = "UPDATE \"Car\" SET \"IsActive\" = @boolValue WHERE \"Id\" = @id";
 
@@ -206,10 +205,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<Car> UpdateCarAsync(int carId, Car updatedCar)
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
 
             cmd.CommandText = "UPDATE \"Car\" " +
                 "SET \"CarModel\" = @carModel, \"YearOfMake\" = @year, \"Mileage\" = @mileage, \"Horsepower\" = @hp, \"CarMakeId\" = @carMake" +
@@ -238,10 +237,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<Car> GetCarAsync(int carId)
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
 
             cmd.CommandText = "SELECT * FROM \"Car\" WHERE \"Id\" = @id";
 
@@ -273,10 +272,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<List<CarMakeModelJoin>> GetCarsDetailedAsync()
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
 
             cmd.CommandText = $"SELECT * FROM \"Car\" c INNER JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\"";
 
@@ -314,10 +313,10 @@ namespace CarsMultilayer.CarsRepository
 
         public async Task<CarMakeModelJoin> GetCarDetailedAsync(int carId)
         {
-            using var conn = new NpgsqlConnection(cString);
+            using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
 
-            using var cmd = new NpgsqlCommand(cString, conn);
+            using var cmd = new NpgsqlCommand(_connectionString, conn);
 
             cmd.CommandText = "SELECT * FROM \"Car\" c FULL JOIN \"CarMake\" cm on cm.\"Id\" = c.\"CarMakeId\" where c.\"Id\" = @id";
 
