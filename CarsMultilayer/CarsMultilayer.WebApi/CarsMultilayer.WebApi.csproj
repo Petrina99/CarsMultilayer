@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.0.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CarsMultilayer.CarService\CarsMultilayer.CarService.csproj" />
+    <ProjectReference Include="..\CarsMultilayer.CarsRepository\CarsMultilayer.CarsRepository.csproj" />
     <ProjectReference Include="..\CarsMultilayer.Common\CarsMultilayer.Common.csproj" />
     <ProjectReference Include="..\CarsMultilayer.Model\CarsMultilayer.Model.csproj" />
   </ItemGroup>
