@@ -2,6 +2,9 @@
 using CarsMultilayer.Model;
 using CarsMultilayer.Common;
 using CarsMultilayer.CarService.Common;
+using AutoMapper;
+using CarsMultilayer.WebApi.Models;
+using System.Reflection;
 
 namespace CarsMultilayer.WebApi.Controllers
 {
@@ -10,10 +13,12 @@ namespace CarsMultilayer.WebApi.Controllers
     public class CarController : ControllerBase
     {
         public ICarService _carService;
+        private readonly IMapper _mapper;
 
-        public CarController(ICarService carService)
+        public CarController(ICarService carService, IMapper mapper)
         {
             _carService = carService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,7 +28,7 @@ namespace CarsMultilayer.WebApi.Controllers
                 int? yearOfCar = null, int? minMiles = null, int? maxMiles = null,
                 int? minHp = null, int? maxHp = null, decimal? minPrice = null, 
                 decimal? maxPrice = null, DateTime? dateStart = null, 
-                DateTime? dateEnd = null, int? pageSize = 3, int? pageNumber = 1, 
+                DateTime? dateEnd = null, int? pageSize = 6, int? pageNumber = 1, 
                 string orderBy = "Price", string sortOrder = "ASC"
             )
         {
@@ -36,13 +41,17 @@ namespace CarsMultilayer.WebApi.Controllers
             
             List<Car> carResult = await _carService.GetCarsAsync(filter, paging, sorting);
 
-            if (carResult == null)
+            List<CarGetRest> carRest = new List<CarGetRest>();
+
+            _mapper.Map(carResult, carRest);
+
+            if (carRest == null)
             {
                 return NotFound("Cars not found");
             }
             else
             {
-                return Ok(carResult);
+                return Ok(carRest);
             }
         }
 
@@ -50,20 +59,25 @@ namespace CarsMultilayer.WebApi.Controllers
         public async Task<IActionResult> GetCarAsync(int id)
         {
             Car carResult = await _carService.GetCarAsync(id);
+            CarGetRest carRest = new CarGetRest();
 
-            if (carResult == null)
+            _mapper.Map(carResult, carRest);
+            if (carRest == null)
             {
                 return BadRequest($"Car with id {id} not found");
             }
             else
             {
-                return Ok(carResult);
+                return Ok(carRest);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCarAsync([FromBody] Car newCar)
+        public async Task<IActionResult> CreateCarAsync([FromBody] CarPostRest postCar)
         {
+            Car newCar = new Car();
+            _mapper.Map(postCar, newCar);
+
             Car carResult = await _carService.CreateCarAsync(newCar);
             
             if (carResult == null)
@@ -90,9 +104,17 @@ namespace CarsMultilayer.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCarAsync(int id, [FromBody] Car updatedCar)
+        public async Task<IActionResult> UpdateCarAsync(
+            int id, int? carMakeId = null, string? carModel = null, int? hp = null,
+            int? yearOfCar = null, int? mileage = null, decimal? price = null
+            )
         {
-            Car result = await _carService.UpdateCarAsync(id, updatedCar);
+            CarUpdateRest updatedCar = new CarUpdateRest(carMakeId, carModel, hp, yearOfCar, mileage, price);
+            Car updateCar = new Car();
+            
+            _mapper.Map(updatedCar, updateCar);
+
+            Car result = await _carService.UpdateCarAsync(id, updateCar);
 
             if (result != null)
             {

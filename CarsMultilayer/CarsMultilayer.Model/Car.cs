@@ -7,14 +7,14 @@ namespace CarsMultilayer.Model
     {
         [Required]
         public int Id { get; set; }
-        public int CarMakeId { get; set; }
+        public int? CarMakeId { get; set; }
         public string? CarModel { get; set; }
-        public int Horsepower { get; set; }
-        public int YearOfMake { get; set; }
-        public int Mileage { get; set; }
-        public decimal Price { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateUpdated { get; set; }
+        public int? Horsepower { get; set; }
+        public int? YearOfMake { get; set; }
+        public int? Mileage { get; set; }
+        public decimal? Price { get; set; }
+        public DateTime? DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
         public bool? IsActive { get; set; }
 
         public Car() { }

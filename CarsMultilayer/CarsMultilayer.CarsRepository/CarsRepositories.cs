@@ -104,6 +104,23 @@ namespace CarsMultilayer.CarsRepository
             return sb.ToString();
         }
 
+        private Car CarChanger(Car currentCar, Car updatedCar)
+        {
+            Car changedCar = currentCar;
+
+            foreach (PropertyInfo prop in updatedCar.GetType().GetProperties()) 
+            {
+                var propValue = prop.GetValue(updatedCar, null);
+
+                if (propValue != null) 
+                {
+                    Console.WriteLine(propValue);
+                    changedCar.GetType().GetProperty(prop.Name).SetValue(changedCar, propValue, null);
+                }
+            }
+            
+            return changedCar;
+        }
         public async Task<List<Car>> GetCarsAsync(CarFilter filter, Paging paging, Sorting sorting)
         {
             using var conn = new NpgsqlConnection(_connectionString);
@@ -216,6 +233,10 @@ namespace CarsMultilayer.CarsRepository
 
             using var cmd = new NpgsqlCommand(_connectionString, conn);
 
+            Car currentCar = await GetCarAsync(carId);
+
+            currentCar = CarChanger(currentCar, updatedCar);
+
             cmd.CommandText = "UPDATE \"Car\" " +
                 "SET \"CarModel\" = @carModel, \"YearOfMake\" = @year, \"Mileage\" = @mileage, \"Horsepower\" = @hp, \"Price\" = @price," +
                 " \"CarMakeId\" = @carMake," +
@@ -224,12 +245,12 @@ namespace CarsMultilayer.CarsRepository
 
             DateTime currentDate = DateTime.Now;
 
-            cmd.Parameters.AddWithValue("carModel", NpgsqlTypes.NpgsqlDbType.Text, updatedCar.CarModel);
-            cmd.Parameters.AddWithValue("year", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.YearOfMake);
-            cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Mileage);
-            cmd.Parameters.AddWithValue("hp", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Horsepower);
-            cmd.Parameters.AddWithValue("carMake", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.CarMakeId);
-            cmd.Parameters.AddWithValue("price", updatedCar.Price);
+            cmd.Parameters.AddWithValue("carModel", NpgsqlTypes.NpgsqlDbType.Text, currentCar.CarModel);
+            cmd.Parameters.AddWithValue("year", NpgsqlTypes.NpgsqlDbType.Integer, currentCar.YearOfMake);
+            cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, currentCar.Mileage);
+            cmd.Parameters.AddWithValue("hp", NpgsqlTypes.NpgsqlDbType.Integer, currentCar.Horsepower);
+            cmd.Parameters.AddWithValue("carMake", NpgsqlTypes.NpgsqlDbType.Integer, currentCar.CarMakeId);
+            cmd.Parameters.AddWithValue("price", currentCar.Price);
             cmd.Parameters.AddWithValue("dateUpdated", currentDate);
             cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
 
@@ -239,7 +260,7 @@ namespace CarsMultilayer.CarsRepository
 
             if (commits > 0)
             {
-                return updatedCar;
+                return currentCar;
             }
             else
             {
@@ -270,6 +291,7 @@ namespace CarsMultilayer.CarsRepository
                     fetchedCar.YearOfMake = (int)reader[2];
                     fetchedCar.Mileage = (int)reader[3];
                     fetchedCar.Horsepower = (int)reader[4];
+                    fetchedCar.Price = (decimal)reader["Price"];
                 }
                 catch (Exception ex)
                 {
