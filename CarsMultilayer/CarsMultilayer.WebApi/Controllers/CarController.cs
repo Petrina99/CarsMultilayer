@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using CarsMultilayer.Model;
-using Npgsql;
 using CarsMultilayer.Common;
 using CarsMultilayer.CarService.Common;
 
@@ -25,7 +23,7 @@ namespace CarsMultilayer.WebApi.Controllers
                 int? yearOfCar = null, int? minMiles = null, int? maxMiles = null,
                 int? minHp = null, int? maxHp = null, decimal? minPrice = null, 
                 decimal? maxPrice = null, DateTime? dateStart = null, 
-                DateTime? dateEnd = null, int pageSize = 3, int pageNumber = 1, 
+                DateTime? dateEnd = null, int? pageSize = 3, int? pageNumber = 1, 
                 string orderBy = "Price", string sortOrder = "ASC"
             )
         {
@@ -33,7 +31,7 @@ namespace CarsMultilayer.WebApi.Controllers
                 carMakeId, carModel, yearOfCar, minMiles, maxMiles,
                 minHp, maxHp, minPrice, maxPrice, dateStart, dateEnd
             );
-            Paging paging = new Paging(pageSize, pageNumber);
+            Paging paging = new Paging((int)pageSize, (int)pageNumber);
             Sorting sorting = new Sorting(orderBy, sortOrder);
             
             List<Car> carResult = await _carService.GetCarsAsync(filter, paging, sorting);

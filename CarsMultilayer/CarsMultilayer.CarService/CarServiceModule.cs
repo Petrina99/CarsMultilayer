@@ -14,7 +14,7 @@ namespace CarsMultilayer.CarService
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<CarServiceClass>()
+            builder.RegisterType<CarServices>()
                     .As<ICarService>()
                     .InstancePerDependency();
         }
