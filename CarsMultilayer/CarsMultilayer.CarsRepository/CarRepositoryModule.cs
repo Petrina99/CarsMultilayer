@@ -13,7 +13,7 @@ namespace CarsMultilayer.CarsRepository
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<CarsRepositoryClass>()
+            builder.RegisterType<CarsRepositories>()
                     .As<ICarsRepository>()
                     .WithParameter("connectionString", "Server=localhost;port=5432;User Id=postgres;Password=admin;Database=cars")
                     .InstancePerDependency();

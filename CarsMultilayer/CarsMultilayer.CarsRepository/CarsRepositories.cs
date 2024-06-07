@@ -7,16 +7,16 @@ using System.Reflection;
 
 namespace CarsMultilayer.CarsRepository
 {
-    public class CarsRepositoryClass : ICarsRepository
+    public class CarsRepositories : ICarsRepository
     {
         private readonly string _connectionString;
 
-        public CarsRepositoryClass(string connectionString) 
+        public CarsRepositories(string connectionString) 
         {
             _connectionString = connectionString;
         }
 
-        private static string QueryBuilder(CarFilter filter, Sorting sorting, Paging paging, NpgsqlCommand cmd) {
+        private string QueryBuilder(CarFilter filter, Sorting sorting, Paging paging, NpgsqlCommand cmd) {
             StringBuilder sb = new StringBuilder("SELECT * FROM \"Car\" WHERE 1=1");
 
             if (filter.CarMakeId != null)
@@ -85,16 +85,22 @@ namespace CarsMultilayer.CarsRepository
                 cmd.Parameters.AddWithValue("dateEnd", filter.DateEnd);
             }
 
-            sb.Append($" ORDER BY \"{sorting.OrderBy}\" {sorting.SortOrder}");
-          
-            int offsetNum = paging.PageNumber == 1 ? 0 : paging.PageSize * (paging.PageNumber - 1);
-         
-            sb.Append(" LIMIT @pageSize");
-            cmd.Parameters.AddWithValue("pageSize", paging.PageSize);
+            if (sorting.OrderBy != null && sorting.SortOrder != null) 
+            {
+                sb.Append($" ORDER BY \"{sorting.OrderBy}\" {sorting.SortOrder}");
+            }
+            
+            if (paging.PageNumber != null && paging.PageSize != null)
+            {
+                int offsetNum = (int)paging.PageNumber == 1 ? 0 : (int)paging.PageSize * ((int)paging.PageNumber - 1);
 
-            sb.Append(" OFFSET @offsetNum;");
-            cmd.Parameters.AddWithValue("offsetNum", offsetNum);
+                sb.Append(" LIMIT @pageSize");
+                cmd.Parameters.AddWithValue("pageSize", paging.PageSize);
 
+                sb.Append(" OFFSET @offsetNum;");
+                cmd.Parameters.AddWithValue("offsetNum", offsetNum);
+            }
+           
             return sb.ToString();
         }
 
@@ -211,14 +217,20 @@ namespace CarsMultilayer.CarsRepository
             using var cmd = new NpgsqlCommand(_connectionString, conn);
 
             cmd.CommandText = "UPDATE \"Car\" " +
-                "SET \"CarModel\" = @carModel, \"YearOfMake\" = @year, \"Mileage\" = @mileage, \"Horsepower\" = @hp, \"CarMakeId\" = @carMake" +
+                "SET \"CarModel\" = @carModel, \"YearOfMake\" = @year, \"Mileage\" = @mileage, \"Horsepower\" = @hp, \"Price\" = @price," +
+                " \"CarMakeId\" = @carMake," +
+                " \"DateUpdated\" = @dateUpdated" +
                 " WHERE \"Id\" = @id";
+
+            DateTime currentDate = DateTime.Now;
 
             cmd.Parameters.AddWithValue("carModel", NpgsqlTypes.NpgsqlDbType.Text, updatedCar.CarModel);
             cmd.Parameters.AddWithValue("year", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.YearOfMake);
             cmd.Parameters.AddWithValue("mileage", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Mileage);
             cmd.Parameters.AddWithValue("hp", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.Horsepower);
             cmd.Parameters.AddWithValue("carMake", NpgsqlTypes.NpgsqlDbType.Integer, updatedCar.CarMakeId);
+            cmd.Parameters.AddWithValue("price", updatedCar.Price);
+            cmd.Parameters.AddWithValue("dateUpdated", currentDate);
             cmd.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Integer, carId);
 
             int commits = await cmd.ExecuteNonQueryAsync();

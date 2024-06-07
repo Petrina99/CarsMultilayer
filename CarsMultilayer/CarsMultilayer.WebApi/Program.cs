@@ -1,11 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CarsMultilayer.CarService;
-using CarsMultilayer.CarService.Common;
 using CarsMultilayer.CarsRepository;
-using CarsMultilayer.CarsRepository.Common;
-using CarsMultilayer.Common;
-using CarsMultilayer.WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 var containerBuilder = new ContainerBuilder();

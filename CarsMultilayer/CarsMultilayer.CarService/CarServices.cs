@@ -1,16 +1,15 @@
 ﻿using CarsMultilayer.CarService.Common;
 using CarsMultilayer.Model;
-using CarsMultilayer.CarsRepository;
 using CarsMultilayer.CarsRepository.Common;
 using CarsMultilayer.Common;
 
 namespace CarsMultilayer.CarService
 {
-    public class CarServiceClass : ICarService
+    public class CarServices : ICarService
     {
         private readonly ICarsRepository _carsRepository;
 
-        public CarServiceClass(ICarsRepository carsRepository) 
+        public CarServices(ICarsRepository carsRepository) 
         { 
             _carsRepository = carsRepository;
         }
@@ -44,7 +43,12 @@ namespace CarsMultilayer.CarService
 
         public async Task<Car> UpdateCarAsync(int carId, Car updatedCar)
         {
-            Car result = await _carsRepository.UpdateCarAsync(carId, updatedCar);
+            Car result = new Car();
+
+            if (carId != null)
+            {
+                result = await _carsRepository.UpdateCarAsync(carId, updatedCar);
+            }
 
             if (result != null) 
             {
