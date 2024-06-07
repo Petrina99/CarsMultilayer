@@ -2,6 +2,7 @@
 using CarsMultilayer.Model;
 using CarsMultilayer.CarsRepository.Common;
 using CarsMultilayer.Common;
+using System.Reflection;
 
 namespace CarsMultilayer.CarService
 {
@@ -30,7 +31,12 @@ namespace CarsMultilayer.CarService
 
         public async Task<bool> DeleteCarAsync(int carId)
         {
-            bool deleteResult = await _carsRepository.DeleteCarAsync(carId);
+            bool deleteResult = false;
+
+            if (carId != null) 
+            { 
+                deleteResult = await _carsRepository.DeleteCarAsync(carId);
+            }
 
             if (deleteResult) 
             {
@@ -45,11 +51,13 @@ namespace CarsMultilayer.CarService
         {
             Car result = new Car();
 
-            if (carId != null)
+            Car doesExist = await _carsRepository.GetCarAsync(carId);
+
+            if (doesExist != null) 
             {
                 result = await _carsRepository.UpdateCarAsync(carId, updatedCar);
             }
-
+            
             if (result != null) 
             {
                 return result;
@@ -61,7 +69,13 @@ namespace CarsMultilayer.CarService
 
         public async Task<Car> GetCarAsync(int carId) 
         {
-            Car result = await _carsRepository.GetCarAsync(carId);
+            Car result = new Car();
+
+            if (carId != null)
+            {
+                result = await _carsRepository.GetCarAsync(carId);
+            }
+
             return result;
         }
 
@@ -73,7 +87,13 @@ namespace CarsMultilayer.CarService
 
         public async Task<CarMakeModelJoin> GetCarDetailedAsync(int carId)
         {
-            CarMakeModelJoin result = await _carsRepository.GetCarDetailedAsync(carId);
+            CarMakeModelJoin result = new CarMakeModelJoin();
+
+            if (carId != null)
+            {
+                result = await _carsRepository.GetCarDetailedAsync(carId);
+            }
+
             return result;
         }
     }
