@@ -114,7 +114,6 @@ namespace CarsMultilayer.CarsRepository
 
                 if (propValue != null) 
                 {
-                    Console.WriteLine(propValue);
                     changedCar.GetType().GetProperty(prop.Name).SetValue(changedCar, propValue, null);
                 }
             }

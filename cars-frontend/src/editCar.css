@@ -1,0 +1,50 @@
+form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 55%;
+    justify-content: center;
+    align-items: center;
+}
+
+form label {
+    flex-basis: 100%;
+    font-size: large;
+}
+
+form input {
+    flex-basis: 100%;
+    border: 2px solid gray;
+    border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.submit-btn-div {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit-btn-div button {
+    flex-basis: 49%;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 20px;
+}
+
+.submit-btn-div button:hover {
+    background-color: darkgray;
+}
+
+select {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 1em;
+    border: 2px solid gray;
+    border-radius: 5px;
+}
