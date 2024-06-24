@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CarsMultilayer.CarMakeRepository.Common\CarsMultilayer.CarMakeRepository.Common.csproj" />
+    <ProjectReference Include="..\CarsMultilayer.CarMakeRepository\CarsMultilayer.CarMakeRepository.csproj" />
     <ProjectReference Include="..\CarsMultilayer.CarService.Common\CarsMultilayer.CarService.Common.csproj" />
     <ProjectReference Include="..\CarsMultilayer.CarsRepository\CarsMultilayer.CarsRepository.csproj" />
     <ProjectReference Include="..\CarsMultilayer.Common\CarsMultilayer.Common.csproj" />

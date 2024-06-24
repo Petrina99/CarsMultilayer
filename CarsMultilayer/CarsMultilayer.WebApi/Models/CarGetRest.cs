@@ -9,5 +9,6 @@
         public int YearOfMake { get; set; }
         public int Mileage { get; set; }
         public decimal Price { get; set; }
+        public string? CarMakeMakeName { get; set; }
     }
 }

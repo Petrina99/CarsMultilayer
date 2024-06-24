@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CarsMultilayer.CarMakeRepository\CarsMultilayer.CarMakeRepository.csproj" />
     <ProjectReference Include="..\CarsMultilayer.CarService\CarsMultilayer.CarService.csproj" />
     <ProjectReference Include="..\CarsMultilayer.CarsRepository\CarsMultilayer.CarsRepository.csproj" />
     <ProjectReference Include="..\CarsMultilayer.Common\CarsMultilayer.Common.csproj" />

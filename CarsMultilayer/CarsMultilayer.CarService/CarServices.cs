@@ -3,21 +3,36 @@ using CarsMultilayer.Model;
 using CarsMultilayer.CarsRepository.Common;
 using CarsMultilayer.Common;
 using System.Reflection;
+using CarsMultilayer.CarMakeRepository.Common;
 
 namespace CarsMultilayer.CarService
 {
     public class CarServices : ICarService
     {
         private readonly ICarsRepository _carsRepository;
+        private readonly ICarMakeRepository _carMakeRepository;
 
-        public CarServices(ICarsRepository carsRepository) 
+        public CarServices(ICarsRepository carsRepository, ICarMakeRepository carMakeRepository) 
         { 
             _carsRepository = carsRepository;
+            _carMakeRepository = carMakeRepository;
+        }
+
+        public async Task<List<CarMake>> GetCarMakesAsync()
+        {
+            List<CarMake> result = await _carMakeRepository.GetAllCarMakeAsync();
+
+            return result;
         }
 
         public async Task<List<Car>> GetCarsAsync(CarFilter filter, Paging paging, Sorting sorting)
         {
             List<Car> carResult = await _carsRepository.GetCarsAsync(filter, paging, sorting);
+
+            foreach (Car car in carResult) 
+            {
+                car.CarMake = await _carMakeRepository.GetCarMakeAsync((int)car.CarMakeId);
+            }
             
             return carResult;
         }

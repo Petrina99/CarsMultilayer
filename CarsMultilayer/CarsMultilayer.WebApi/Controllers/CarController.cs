@@ -21,14 +21,29 @@ namespace CarsMultilayer.WebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllCarMakes")]
+
+        public async Task<IActionResult> GetCarMakesAsync()
+        {
+            List<CarMake> result = await _carService.GetCarMakesAsync();
+
+            if (result == null)
+            {
+                return NotFound("Car makes not found");
+            }
+            else
+            {
+                return Ok(result);
+            }
+        }
+        [HttpGet("GetAllCars")]
         public async Task<IActionResult> GetCarsAsync
             (
                 int? carMakeId = null, string? carModel = null,
                 int? yearOfCar = null, int? minMiles = null, int? maxMiles = null,
                 int? minHp = null, int? maxHp = null, decimal? minPrice = null, 
                 decimal? maxPrice = null, DateTime? dateStart = null, 
-                DateTime? dateEnd = null, int? pageSize = 6, int? pageNumber = 1, 
+                DateTime? dateEnd = null, int? pageSize = 20, int? pageNumber = 1, 
                 string orderBy = "Price", string sortOrder = "ASC"
             )
         {

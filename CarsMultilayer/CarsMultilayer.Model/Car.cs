@@ -16,6 +16,7 @@ namespace CarsMultilayer.Model
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
         public bool? IsActive { get; set; }
+        public CarMake? CarMake { get; set; }
 
         public Car() { }
         public Car(int id, int carMakeId, string? carModel, int horsepower, int yearOfMake, int mileage, decimal price, DateTime dateCreated, DateTime dateUpdated, bool? isActive)

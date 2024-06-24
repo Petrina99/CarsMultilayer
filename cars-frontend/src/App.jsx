@@ -1,9 +1,7 @@
 import './App.css'
-import { seedData } from './seedCars';
 import { useEffect, useState } from 'react';
-import { CarRow } from './CarRow';
-import { EditCar } from './EditCar';
-import { AddCar } from './AddCar';
+import { CarRow, EditCar, AddCar, Header } from './components';
+import { getCars, deleteCar } from './services/carService';
 
 function App() {
 
@@ -13,33 +11,19 @@ function App() {
     const [carToUpdate, setCarToUpdate] = useState({});
 
     useEffect(() => {
-
-        const carStorage = JSON.parse(localStorage.getItem("cars")) || [];
-
-        setCars(carStorage);
-        
-        if (carStorage.length === 0) {
-        localStorage.setItem("cars", JSON.stringify(seedData));
-        setCars(JSON.parse(localStorage.getItem("cars")));
-        }
+        getAllCars();
     }, [cars.length]);
 
-    const handleAdd = (newCar) => {
-        const date = new Date(newCar.year).getFullYear();
-        newCar.year = date;
+    const getAllCars = async () => {
+        const carStorage = await getCars();
 
-        const newCars = [...cars, newCar];
-
-        localStorage.setItem("cars", JSON.stringify(newCars));
-        setCars(newCars);
+        setCars(carStorage);
     }
 
-    const handleDelete = (index) => {
-        const carStorage = JSON.parse(localStorage.getItem("cars"));
-        carStorage.splice(index, 1);
+    const handleDelete = async (index) => {
+        await deleteCar(index);
 
-        localStorage.setItem("cars", JSON.stringify(carStorage));
-        setCars(carStorage);
+        getAllCars();
     }
 
     const handleUpdate = (index) => {
@@ -52,6 +36,7 @@ function App() {
 
     return (
         <>
+            <Header />
             <main>
                 <h1>Welcome to Car info</h1>
                 <h1>All cars</h1>
@@ -64,17 +49,16 @@ function App() {
                             <th>Year</th>
                             <th>Mileage (km)</th>
                             <th>Price (€)</th>
-                            <th>Color</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {cars.map((car, index) => 
+                    {cars.map((car) => 
                         <CarRow 
                         car={car} 
-                        index={index} 
-                        handleUpdate={() => handleUpdate(index)}
-                        handleDelete={() => handleDelete(index)}
+                        index={car.id} 
+                        handleUpdate={() => handleUpdate(car.id)}
+                        handleDelete={() => handleDelete(car.id)}
                         />
                         )}
                     </tbody>
@@ -94,7 +78,7 @@ function App() {
                 }
                 {isAdd && 
                 <AddCar
-                    handleAdd={handleAdd}
+                    setCars={setCars}
                     handleClose={() => setIsAdd(!isAdd)}
                 />
                 }
