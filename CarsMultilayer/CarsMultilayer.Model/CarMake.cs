@@ -9,7 +9,7 @@ namespace CarsMultilayer.Model
         public string? MakeName { get; set; }
         public string? MakeCountry { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
         public CarMake() { }
         public CarMake(int id, string? makeName, string? makeCountry)
         {

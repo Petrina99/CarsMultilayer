@@ -1,5 +1,5 @@
 import React from 'react'
-import './editCar.css';
+import './styles/editCar.css';
 
 export class EditCar extends React.Component {
     constructor(props) {

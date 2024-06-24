@@ -139,20 +139,20 @@ namespace CarsMultilayer.CarsRepository
                 {
                     if ((bool)reader[8] == true) 
                     { 
-                        carResult.Add(
-                            new Car(
-                                id: (int)reader[0],
-                                carMakeId: (int)reader["CarMakeId"],
-                                carModel: reader[1].ToString(),
-                                yearOfMake: (int)reader[2],
-                                mileage: (int)reader[3],
-                                horsepower: (int)reader[4],
-                                price: (decimal)reader[5],
-                                dateCreated: (DateTime)reader[6],
-                                dateUpdated: (DateTime)reader[7],
-                                isActive: (bool)reader[8]
-                            )
+                        Car car = new Car(
+                            id: (int)reader[0],
+                            carMakeId: (int)reader["CarMakeId"],
+                            carModel: reader[1].ToString(),
+                            yearOfMake: (int)reader[2],
+                            mileage: (int)reader[3],
+                            horsepower: (int)reader[4],
+                            price: (decimal)reader[5],
+                            dateCreated: (DateTime)reader[6],
+                            dateUpdated: (DateTime)reader[7],
+                            isActive: (bool)reader[8]
                         );
+
+                        carResult.Add(car);
                     }
                 }
                 catch (Exception ex)

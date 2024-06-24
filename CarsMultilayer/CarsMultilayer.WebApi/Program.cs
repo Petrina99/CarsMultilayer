@@ -1,6 +1,8 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using CarsMultilayer.CarMakeRepository;
 using CarsMultilayer.CarService;
 using CarsMultilayer.CarsRepository;
 using CarsMultilayer.Model;
@@ -14,6 +16,18 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule<CarRepositoryModule>();
     containerBuilder.RegisterModule<CarServiceModule>();
+    containerBuilder.RegisterModule<CarMakeRepositoryModule>();
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin();
+            builder.AllowAnyHeader();
+            builder.AllowAnyMethod();
+        });
 });
 
 var container = containerBuilder.Build();
@@ -33,7 +47,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 app.MapControllers();

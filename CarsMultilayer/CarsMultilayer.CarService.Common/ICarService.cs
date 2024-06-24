@@ -14,6 +14,7 @@ namespace CarsMultilayer.CarService.Common
     public interface ICarService
     {
         public Task<List<Car>> GetCarsAsync(CarFilter filter, Paging paging, Sorting sorting);
+        public Task<List<CarMake>> GetCarMakesAsync();
         public Task<Car> CreateCarAsync(Car newCar);
         public Task<bool> DeleteCarAsync(int carId);
         public Task<Car> UpdateCarAsync(int carId, Car updatedCar);
