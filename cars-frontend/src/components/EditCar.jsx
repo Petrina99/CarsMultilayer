@@ -57,7 +57,7 @@ export class EditCar extends React.Component {
         const { carToUpdate, handleClose, carMakes } = this.props;
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} className='add-edit-form'>
                 <h1>Edit car</h1>
                 <select name="carMakeId" onChange={this.handleChange}>
                     {carMakes.map((make) => {

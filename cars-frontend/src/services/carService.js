@@ -2,8 +2,23 @@ import axios from 'axios';
 
 const API_URL = 'https://localhost:7195/api/Car';
 
-export const getCars = async () => {
-    const response = await axios.get(API_URL + '/GetAllCars');
+export const getCars = async (filters) => {
+
+    const { carMakeId, carModel, yearOfMake, minHp, maxHp, minMiles, maxMiles, minPrice, maxPrice } = filters;
+
+    const response = await axios.get(API_URL + '/GetAllCars', {
+        params: {
+            carMakeId: carMakeId,
+            carModel: carModel,
+            yearOfCar: yearOfMake,
+            minMiles,
+            maxMiles,
+            minHp,
+            maxHp,
+            minPrice,
+            maxPrice
+        }
+    });
 
     return response.data;
 }

@@ -44,7 +44,7 @@ export const AddCar = ({ setCars, handleClose, carMakes }) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className='add-edit-form'>
                 <h1>Add car</h1>
                 <select name="carMakeId" onChange={handleChange}>
                     {carMakes.map((make) => {
