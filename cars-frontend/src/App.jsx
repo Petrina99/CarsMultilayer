@@ -1,6 +1,6 @@
 import './App.css'
 import { useEffect, useState } from 'react';
-import { CarRow, EditCar, AddCar, Header } from './components';
+import { CarRow, EditCar, AddCar, Header, Filters } from './components';
 import { getCars, deleteCar, getMakes } from './services/carService';
 
 function App() {
@@ -9,7 +9,9 @@ function App() {
     const [carMakes, setCarMakes] = useState([]);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isAdd, setIsAdd] = useState(false);
+    const [isFilters, setIsFilters] = useState(false);
     const [carToUpdate, setCarToUpdate] = useState({});
+    const [filters, setFilters] = useState({});
 
     useEffect(() => {
         getAllCars();
@@ -17,7 +19,7 @@ function App() {
     }, [cars.length]);
 
     const getAllCars = async () => {
-        const carStorage = await getCars();
+        const carStorage = await getCars(filters);
 
         setCars(carStorage);
     }
@@ -48,6 +50,21 @@ function App() {
             <main>
                 <h1>Welcome to Car info</h1>
                 <h1>All cars</h1>
+                {isFilters ? (
+                <Filters 
+                    carMakes={carMakes}
+                    setCars={setCars}
+                    filters={filters}
+                    setFilters={setFilters}
+                    handleClose={() => setIsFilters(!isFilters)}
+                />) : (
+                    <div className='add-btn-div'>
+                        <button onClick={() => setIsFilters(!isFilters)}>
+                            Open filters
+                        </button>
+                    </div>
+                )
+                }   
                 <table>
                     <thead>
                         <tr>
