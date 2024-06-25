@@ -32,9 +32,19 @@ export const deleteCar = async(id) => {
 }
 
 export const updateCar = async (id, newData) => {
-    const response = await axios.put(API_URL, { params: {
-        id: id
-    }});
+    const { carMakeId, carModel, horsepower, year, mileage, price } = newData;
+    
+    const response = await axios.put(API_URL, {}, {
+        params: {
+            id: id,
+            carMakeId: carMakeId,
+            carModel: carModel,
+            hp: horsepower,
+            yearOfCar: year,
+            mileage: mileage,
+            price: price
+        }
+    });
 
     return response;
 }

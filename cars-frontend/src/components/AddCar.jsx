@@ -1,23 +1,12 @@
 import React from 'react'
 import './styles/editCar.css';
 
-import { getMakes, createCar, getCars } from '../services/carService';
-import { useState, useEffect } from 'react';
+import { createCar, getCars } from '../services/carService';
+import { useState } from 'react';
 
-export const AddCar = ({ setCars, handleClose }) => {
+export const AddCar = ({ setCars, handleClose, carMakes }) => {
 
     const [carInputs, setCarInputs] = useState({});
-    const [carMakes, setCarMakes] = useState([]);
-
-    useEffect(() => {
-        getAllMakes();
-    }, [carMakes.length]);
-
-    const getAllMakes = async() => {
-        const makeStorage = await getMakes();
-
-        setCarMakes(makeStorage);
-    }
 
     const postCar = async(carData) => {
         await createCar(carData);
@@ -42,12 +31,14 @@ export const AddCar = ({ setCars, handleClose }) => {
             e.target.name === "carMakeId" || 
             e.target.name === "horsepower" ||
             e.target.name === "yearOfMake" ||
-            e.target.name === "mileage" ||
-            e.target.name === "price"
+            e.target.name === "mileage"
         ) {
             value = parseInt(e.target.value);
         }
 
+        if (e.target.name === "price") {
+            value = parseFloat(e.target.value);
+        }
         setCarInputs({...carInputs, [e.target.name]: value });
     }
 

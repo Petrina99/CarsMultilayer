@@ -1,23 +1,31 @@
 import './App.css'
 import { useEffect, useState } from 'react';
 import { CarRow, EditCar, AddCar, Header } from './components';
-import { getCars, deleteCar } from './services/carService';
+import { getCars, deleteCar, getMakes } from './services/carService';
 
 function App() {
 
     const [cars, setCars] = useState([]);
+    const [carMakes, setCarMakes] = useState([]);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isAdd, setIsAdd] = useState(false);
     const [carToUpdate, setCarToUpdate] = useState({});
 
     useEffect(() => {
         getAllCars();
+        getAllMakes();
     }, [cars.length]);
 
     const getAllCars = async () => {
         const carStorage = await getCars();
 
         setCars(carStorage);
+    }
+
+    const getAllMakes = async () => {
+        const makeStorage = await getMakes();
+
+        setCarMakes(makeStorage);
     }
 
     const handleDelete = async (index) => {
@@ -29,7 +37,7 @@ function App() {
     const handleUpdate = (index) => {
         setIsUpdate(!isUpdate);
 
-        const findCar = cars[index];
+        const findCar = cars.find((x) => x.id = index);
 
         setCarToUpdate(findCar);
     }
@@ -71,7 +79,7 @@ function App() {
                 {isUpdate && 
                 <EditCar
                     carToUpdate={carToUpdate}
-                    cars={cars}
+                    carMakes={carMakes}
                     setCars={setCars}
                     handleClose={() => setIsUpdate(!isUpdate)}
                 />
@@ -79,6 +87,7 @@ function App() {
                 {isAdd && 
                 <AddCar
                     setCars={setCars}
+                    carMakes={carMakes}
                     handleClose={() => setIsAdd(!isAdd)}
                 />
                 }

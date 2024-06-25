@@ -1,5 +1,6 @@
 import React from 'react'
 import './styles/editCar.css';
+import { updateCar, getCars } from '../services/carService';
 
 export class EditCar extends React.Component {
     constructor(props) {
@@ -7,61 +8,67 @@ export class EditCar extends React.Component {
 
         this.state = {
             carInputs: {},
+            carMakes: []
         };
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { cars, carToUpdate, setCars, handleClose } = this.props;
+        const { carToUpdate, setCars, handleClose } = this.props;
 
-        const index = cars.indexOf(carToUpdate);
-        const newCars = [...cars]; 
+        const { carInputs } = this.state;
 
-        Object.keys(carToUpdate).forEach((a) => {
-            if (this.state.carInputs[a] !== undefined) {
-                carToUpdate[a] = this.state.carInputs[a];
-            }
-        })
+        await updateCar(carToUpdate.id, carInputs);
+        
+        const carStorage = await getCars(); 
 
-        const date = new Date(carToUpdate.year).getFullYear();
-        carToUpdate.year = date;
-
-        newCars[index] = {...carToUpdate};
-        setCars(newCars);
+        setCars(carStorage);
 
         handleClose();
-        localStorage.setItem("cars", JSON.stringify(newCars));
     }
 
     handleChange = (e) => {
+        let value = e.target.value;
+
+        if (
+            e.target.name === "carMakeId" || 
+            e.target.name === "horsepower" ||
+            e.target.name === "year" ||
+            e.target.name === "mileage"
+        ) {
+            value = parseInt(e.target.value);
+        }
+
+        if (e.target.name === "price") {
+            value = parseFloat(e.target.value);
+        }
+
         this.setState({
             carInputs: {
                 ...this.state.carInputs,
-                [e.target.name]: e.target.value
+                [e.target.name]: value
             }
         });
     }
 
     render() {
 
-        const { carToUpdate, handleClose } = this.props;
+        const { carToUpdate, handleClose, carMakes } = this.props;
 
         return (
             <form onSubmit={this.handleSubmit}>
                 <h1>Edit car</h1>
-                <input type="text" name="carMake" id="car-make-form" placeholder={carToUpdate.carMake} onChange={this.handleChange}/>
-                <input type="text" name="carModel" id="car-model-form" placeholder={carToUpdate.carModel} onChange={this.handleChange}/>
-                <input type="number" name="horsepower" id="horsepower-form" placeholder={carToUpdate.horsepower} onChange={this.handleChange}/>
-                <input type="date" name="year" id="year-form" onChange={this.handleChange} />
-                <input type="number" name="mileage" id="mileage-form" placeholder={carToUpdate.mileage} onChange={this.handleChange}/>
-                <input type="number" name="price" id="price-form" placeholder={carToUpdate.price} onChange={this.handleChange}/>
-                <select name="color" id="color-select" onChange={this.handleChange}>
-                    <option value="Red">Red</option>
-                    <option value="black">Black</option>
-                    <option value="White">White</option>
-                    <option value="Gray">Gray</option>
+                <select name="carMakeId" onChange={this.handleChange}>
+                    {carMakes.map((make) => {
+                        return <option value={make.id}>{make.makeName}</option>
+                    })}
                 </select>
+                <input type="text" name="carModel" placeholder={carToUpdate.carModel} onChange={this.handleChange}/>
+                <input type="number" name="horsepower" placeholder={carToUpdate.horsepower} onChange={this.handleChange}/>
+                <input type="number" name="year" onChange={this.handleChange} placeholder={carToUpdate.yearOfMake}/>
+                <input type="number" name="mileage" placeholder={carToUpdate.mileage} onChange={this.handleChange}/>
+                <input type="number" name="price" step="0.1" placeholder={carToUpdate.price} onChange={this.handleChange}/>
                 <div className="submit-btn-div">
                     <button type="submit" id="submit-btn">Edit</button>
                     <button type="button" onClick={handleClose}>Close form</button>
