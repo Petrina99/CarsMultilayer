@@ -1,16 +1,24 @@
 import React from 'react'
 
-export const CarRow = ({ car, index, handleDelete, handleUpdate }) => {
+import { useNavigate } from 'react-router-dom';
+
+export const CarRow = ({ car, handleDelete }) => {
     
+    const navigate = useNavigate();
+
+    const handleUpdate = () => {
+        navigate(`update-car/${car.id}`);
+    }
+
     return (
-        <tr key={index}>
+        <tr key={car.id}>
             <td>{car.carMakeMakeName}</td>
             <td>{car.carModel}</td>
             <td>{car.horsepower}</td>
             <td>{car.yearOfMake}</td>
             <td>{car.mileage}</td>
             <td>{car.price}</td>
-            <td>
+            <td className='action-cell'>
                 <button 
                     className='actionBtn'
                     onClick={handleUpdate}

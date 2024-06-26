@@ -1,0 +1,55 @@
+.actionBtn {
+    border: none;
+    background-color: black;
+    color: white;
+    padding: 0.5em;
+    border-radius: 5px;
+    margin-bottom: 3px;
+    cursor: pointer;
+  }
+  
+  .actionBtn:hover {
+    background-color: darkgray;
+  }
+  
+  table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  
+  th, td {
+  padding: 20px;
+  text-align: center;
+  }
+  
+  th {
+    background-color: black;
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: gray;
+    color: white;
+  }
+  
+  tr:nth-child(even) a{
+    color: white;
+  }
+  
+  .add-form-div {
+    flex-basis: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .action-cell {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .action-cell button {
+    flex-basis: 100%;
+  }

@@ -1,6 +1,8 @@
-import React from 'react'
+import React from 'react';
+
 import './styles/editCar.css';
-import { updateCar, getCars } from '../services/carService';
+import { updateCar } from '../services/carService';
+import { Link } from 'react-router-dom';
 
 export class EditCar extends React.Component {
     constructor(props) {
@@ -8,24 +10,21 @@ export class EditCar extends React.Component {
 
         this.state = {
             carInputs: {},
-            carMakes: []
         };
     }
 
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { carToUpdate, setCars, handleClose } = this.props;
+        const { carToUpdate, redirectToRoot } = this.props;
 
         const { carInputs } = this.state;
 
         await updateCar(carToUpdate.id, carInputs);
-        
-        const carStorage = await getCars(); 
 
-        setCars(carStorage);
+        this.setState({ carInputs: {}});
 
-        handleClose();
+        redirectToRoot();
     }
 
     handleChange = (e) => {
@@ -54,7 +53,7 @@ export class EditCar extends React.Component {
 
     render() {
 
-        const { carToUpdate, handleClose, carMakes } = this.props;
+        const { carToUpdate, carMakes } = this.props;
 
         return (
             <form onSubmit={this.handleSubmit} className='add-edit-form'>
@@ -71,7 +70,7 @@ export class EditCar extends React.Component {
                 <input type="number" name="price" step="0.1" placeholder={carToUpdate.price} onChange={this.handleChange}/>
                 <div className="submit-btn-div">
                     <button type="submit" id="submit-btn">Edit</button>
-                    <button type="button" onClick={handleClose}>Close form</button>
+                    <Link to={'/'}>Back to all cars</Link>
                 </div>
             </form>
         )

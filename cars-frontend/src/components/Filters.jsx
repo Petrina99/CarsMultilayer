@@ -27,7 +27,8 @@ export const Filters = ({ carMakes, setCars, filters, setFilters, handleClose })
             e.target.name === "maxHp" ||
             e.target.name === "yearOfMake" ||
             e.target.name === "minMiles" ||
-            e.target.name === "maxMiles"
+            e.target.name === "maxMiles" ||
+            e.target.name === "pageSize"
         ) {
             value = parseInt(e.target.value);
         }
@@ -53,6 +54,23 @@ export const Filters = ({ carMakes, setCars, filters, setFilters, handleClose })
             <input type="number" value={filters.maxHp} name="maxHp" onChange={handleChange} placeholder='Max. Horsepower'/>
             <input type="number" value={filters.minPrice} name="minPrice" onChange={handleChange} step="0.1" placeholder='Min. Price'/>
             <input type="number" value={filters.maxPrice} name="maxPrice" onChange={handleChange} step="0.1" placeholder='Max. Price'/>
+            <div className='sort-div'>
+                <label>Order by: </label>
+                <select name="orderBy" onChange={handleChange}>
+                    <option value="Price">Price</option>
+                    <option value="Mileage">Mileage</option>
+                    <option value="Horsepower">Horsepower</option>
+                    <option value="YearOfMake">Year</option>
+                </select>
+            </div>
+            <div className='sort-div'>
+                <label>Sort order: </label>
+                <select name="sortOrder" onChange={handleChange}>
+                    <option value="ASC">Low to High</option>
+                    <option value="DESC">High to Low</option>
+                </select>
+            </div>
+            <input type="number" name="pageSize" placeholder='Results per page' onChange={handleChange} />
             <div className="submit-btn-div-filter">
                 <button type="submit">Filter</button>
                 <button type="button" onClick={handleReset}>Reset filters</button>
