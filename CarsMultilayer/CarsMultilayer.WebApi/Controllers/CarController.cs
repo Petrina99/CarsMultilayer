@@ -70,7 +70,7 @@ namespace CarsMultilayer.WebApi.Controllers
             }
         }
 
-        [HttpGet("/Car/{id}")]
+        [HttpGet("GetCar")]
         public async Task<IActionResult> GetCarAsync(int id)
         {
             Car carResult = await _carService.GetCarAsync(id);

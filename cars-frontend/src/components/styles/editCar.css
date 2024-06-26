@@ -36,6 +36,23 @@
     background-color: darkgray;
 }
 
+.submit-btn-div a {
+    flex-basis: 48%;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.submit-btn-div a:hover {
+    background-color: darkgray;
+}
+
 select {
     width: 100%;
     margin-bottom: 20px;

@@ -1,29 +1,25 @@
 import React from 'react'
 import './styles/editCar.css';
 
-import { createCar, getCars } from '../services/carService';
+import { createCar } from '../services/carService';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-export const AddCar = ({ setCars, handleClose, carMakes }) => {
+export const AddCar = ({ carMakes }) => {
 
     const [carInputs, setCarInputs] = useState({});
-
-    const postCar = async(carData) => {
-        await createCar(carData);
-    }
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await postCar(carInputs);
-        const carStorage = await getCars();
-
-        setCars(carStorage);
-        setCarInputs({});
+        await createCar(carInputs);
         
-        handleClose();
+        setCarInputs({});
+
+        navigate("/");
     }
-    
+
     const handleChange = (e) => {
         let value = e.target.value;
 
@@ -51,8 +47,6 @@ export const AddCar = ({ setCars, handleClose, carMakes }) => {
                         return <option value={make.id}>{make.makeName}</option>
                     })}
                 </select>
-                {/* 
-                <input type="text" value={carInputs.carMake || '' } name="carMake" placeholder="Car make" onChange={handleChange}/>*/}
                 <input type="text" value={carInputs.carModel || '' } name="carModel" placeholder="Car model" onChange={handleChange}/>
                 <input type="number" value={carInputs.horsepower || ''} name="horsepower" placeholder="Horsepower" onChange={handleChange}/>
                 <input type="number" name="yearOfMake" onChange={handleChange} placeholder='Year'/>
@@ -60,7 +54,7 @@ export const AddCar = ({ setCars, handleClose, carMakes }) => {
                 <input type="number" value={carInputs.price || ''} name="price" placeholder="Price (€)" onChange={handleChange}/>
                 <div className="submit-btn-div">
                     <button type="submit">Add</button>
-                    <button type="button" onClick={handleClose}>Close form</button>
+                    <Link to={'/'}>Back to all cars</Link>
                 </div>
             </form>
         </>
