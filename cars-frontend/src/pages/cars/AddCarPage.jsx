@@ -11,7 +11,7 @@ export const AddCarPage = () => {
     const [carMakes, setCarMakes] = useState([]);
     const navigate = useNavigate();
 
-    const [context, setContext] = useContext(UserContext);
+    const [context] = useContext(UserContext);
 
     useEffect(() => {
         if (context.role !== "admin") {

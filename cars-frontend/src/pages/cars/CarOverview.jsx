@@ -11,7 +11,7 @@ export const CarOverview = () => {;
 
     const [user, setUser] = useState({});
 
-    const [context, setContext] = useContext(UserContext);
+    const [context] = useContext(UserContext);
 
     const [cars, setCars] = useState([]);
     const [carMakes, setCarMakes] = useState([]);
