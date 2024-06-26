@@ -37,7 +37,7 @@ export const Header = () => {
             </div>
             <nav>
                 <Link to={'/all-cars'}>All cars</Link>
-                <Link to={'/add-car'}>Create car</Link>
+                {user.role === "admin" && <Link to={'/add-car'}>Create car</Link>}
                 {user.role === "guest" ? (
                     <Link to={'/login'}>Login</Link>
                 ) : (

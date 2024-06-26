@@ -9,6 +9,8 @@ import './styles/carOverview.css';
 
 export const CarOverview = () => {;
 
+    const [user, setUser] = useState({});
+
     const [context, setContext] = useContext(UserContext);
 
     const [cars, setCars] = useState([]);
@@ -19,6 +21,8 @@ export const CarOverview = () => {;
     useEffect(() => {
         getAllCars();
         getAllMakes();
+
+        setUser(context);
     }, [cars.length]);
 
     const getAllCars = async () => {
@@ -61,9 +65,12 @@ export const CarOverview = () => {;
                 cars={cars}
                 handleDelete={handleDelete}
             />
-            <div className='add-btn-div'>
-                <Link to={`/add-car`}>Add car</Link>
-            </div>  
+            {user.role === "admin" && 
+                <div className='add-btn-div'>
+                    <Link to={`/add-car`}>Add car</Link>
+                </div>
+            }
+              
         </div>
     )
 }
