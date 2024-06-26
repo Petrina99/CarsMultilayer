@@ -11,7 +11,7 @@ export const UpdateCarPage = () => {
     const [carToUpdate, setCarToUpdate] = useState({});
     const [carMakes, setCarMakes] = useState([]);
 
-    const [context, setContext] = useContext(UserContext);
+    const [context] = useContext(UserContext);
 
     const navigate = useNavigate();
     let { id } = useParams();
