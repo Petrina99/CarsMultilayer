@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { EditCar } from "../components";
-import { getCar, getMakes } from "../services/carService";
+import { EditCar } from "../../components";
+import { getCar, getMakes } from "../../services/carService";
 
 export const UpdateCarPage = () => {
 
     const [carToUpdate, setCarToUpdate] = useState({});
     const [carMakes, setCarMakes] = useState([]);
 
-    const location = useLocation();
     const navigate = useNavigate();
+    let { id } = useParams();
 
     useEffect(() => {
         getCarToUpdate();
@@ -18,8 +18,8 @@ export const UpdateCarPage = () => {
     }, []);
 
     const getCarToUpdate = async () => {
-        const carId = parseInt(location.pathname.split("car/")[1]);
-        const fetchedCar = await getCar(carId);
+
+        const fetchedCar = await getCar(id);
 
         setCarToUpdate(fetchedCar);
     }
@@ -31,7 +31,7 @@ export const UpdateCarPage = () => {
     }
 
     const redirectToRoot = () => {
-        navigate("/");
+        navigate("/all-cars");
     }
 
     return (

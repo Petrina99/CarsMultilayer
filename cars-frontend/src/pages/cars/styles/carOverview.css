@@ -16,6 +16,7 @@
   .add-btn-div {
     flex-basis: 100%;
     margin-bottom: 5px;
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
   }

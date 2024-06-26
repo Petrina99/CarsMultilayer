@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles/editCar.css';
 
-import { createCar } from '../services/carService';
+import { createCar } from '../../services/carService';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ export const AddCar = ({ carMakes }) => {
         
         setCarInputs({});
 
-        navigate("/");
+        navigate("/all-cars");
     }
 
     const handleChange = (e) => {
@@ -54,7 +54,7 @@ export const AddCar = ({ carMakes }) => {
                 <input type="number" value={carInputs.price || ''} name="price" placeholder="Price (€)" onChange={handleChange}/>
                 <div className="submit-btn-div">
                     <button type="submit">Add</button>
-                    <Link to={'/'}>Back to all cars</Link>
+                    <Link to={'/all-cars'}>Back to all cars</Link>
                 </div>
             </form>
         </>

@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
-import { Filters, CarTable } from '../components';
-import { getCars, deleteCar, getMakes } from '../services/carService'
-
+import { Filters, CarTable } from '../../components';
+import { getCars, deleteCar, getMakes } from '../../services/carService'
+import { UserContext } from '../../context/UserContext';
 import { Link } from 'react-router-dom';
+
 import './styles/carOverview.css';
 
 export const CarOverview = () => {;
+
+    const [context, setContext] = useContext(UserContext);
 
     const [cars, setCars] = useState([]);
     const [carMakes, setCarMakes] = useState([]);
@@ -59,7 +62,7 @@ export const CarOverview = () => {;
                 handleDelete={handleDelete}
             />
             <div className='add-btn-div'>
-                <Link to={`add-car`}>Add car</Link>
+                <Link to={`/add-car`}>Add car</Link>
             </div>  
         </div>
     )

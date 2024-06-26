@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './styles/editCar.css';
-import { updateCar } from '../services/carService';
+import { updateCar } from '../../services/carService';
 import { Link } from 'react-router-dom';
 
 export class EditCar extends React.Component {
@@ -70,7 +70,7 @@ export class EditCar extends React.Component {
                 <input type="number" name="price" step="0.1" placeholder={carToUpdate.price} onChange={this.handleChange}/>
                 <div className="submit-btn-div">
                     <button type="submit" id="submit-btn">Edit</button>
-                    <Link to={'/'}>Back to all cars</Link>
+                    <Link to={'/all-cars'}>Back to all cars</Link>
                 </div>
             </form>
         )

@@ -53,7 +53,7 @@
     background-color: darkgray;
 }
 
-select {
+.add-edit-form select {
     width: 100%;
     margin-bottom: 20px;
     padding: 1em;

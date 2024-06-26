@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Root, CarOverview, AddCarPage, UpdateCarPage } from "../pages";
+import { Root, CarOverview, AddCarPage, UpdateCarPage, Homepage, Login } from "../pages";
 
 export const router = createBrowserRouter([
     {
@@ -8,6 +8,10 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
+                element: <Homepage />
+            },
+            {
+                path: "all-cars",
                 element: <CarOverview />
             }, 
             {
@@ -20,4 +24,8 @@ export const router = createBrowserRouter([
             }
         ]
     },
+    {
+        path: "/login",
+        element: <Login />
+    }
 ]);

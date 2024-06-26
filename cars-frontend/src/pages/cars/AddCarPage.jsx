@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import { AddCar } from '../components'
-import { getMakes } from '../services/carService';
+import { AddCar } from '../../components'
+import { getMakes } from '../../services/carService';
 
 export const AddCarPage = () => {
 
