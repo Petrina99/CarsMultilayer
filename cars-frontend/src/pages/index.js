@@ -1,4 +1,4 @@
 export * from './Root';
-export * from './CarOverview';
-export * from './AddCarPage';
-export * from './UpdateCarPage';
+export * from './cars';
+export * from './auth';
+export * from './Homepage';

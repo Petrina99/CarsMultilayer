@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
-import { Filters, CarTable } from '../components';
-import { getCars, deleteCar, getMakes } from '../services/carService'
-
+import { Filters, CarTable } from '../../components';
+import { getCars, deleteCar, getMakes } from '../../services/carService'
+import { UserContext } from '../../context/UserContext';
 import { Link } from 'react-router-dom';
+
 import './styles/carOverview.css';
 
 export const CarOverview = () => {;
+
+    const [user, setUser] = useState({});
+
+    const [context, setContext] = useContext(UserContext);
 
     const [cars, setCars] = useState([]);
     const [carMakes, setCarMakes] = useState([]);
@@ -16,6 +21,8 @@ export const CarOverview = () => {;
     useEffect(() => {
         getAllCars();
         getAllMakes();
+
+        setUser(context);
     }, [cars.length]);
 
     const getAllCars = async () => {
@@ -58,9 +65,12 @@ export const CarOverview = () => {;
                 cars={cars}
                 handleDelete={handleDelete}
             />
-            <div className='add-btn-div'>
-                <Link to={`add-car`}>Add car</Link>
-            </div>  
+            {user.role === "admin" && 
+                <div className='add-btn-div'>
+                    <Link to={`/add-car`}>Add car</Link>
+                </div>
+            }
+              
         </div>
     )
 }

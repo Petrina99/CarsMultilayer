@@ -1,25 +1,33 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { EditCar } from "../components";
-import { getCar, getMakes } from "../services/carService";
+import { UserContext } from "../../context/UserContext";
+
+import { EditCar } from "../../components";
+import { getCar, getMakes } from "../../services/carService";
 
 export const UpdateCarPage = () => {
 
     const [carToUpdate, setCarToUpdate] = useState({});
     const [carMakes, setCarMakes] = useState([]);
 
-    const location = useLocation();
+    const [context, setContext] = useContext(UserContext);
+
     const navigate = useNavigate();
+    let { id } = useParams();
 
     useEffect(() => {
+
+        if (context.role !== "admin") {
+            navigate("/");
+        }
         getCarToUpdate();
         getCarMakes();
     }, []);
 
     const getCarToUpdate = async () => {
-        const carId = parseInt(location.pathname.split("car/")[1]);
-        const fetchedCar = await getCar(carId);
+
+        const fetchedCar = await getCar(id);
 
         setCarToUpdate(fetchedCar);
     }
@@ -31,7 +39,7 @@ export const UpdateCarPage = () => {
     }
 
     const redirectToRoot = () => {
-        navigate("/");
+        navigate("/all-cars");
     }
 
     return (

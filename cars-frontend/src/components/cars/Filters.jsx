@@ -1,5 +1,5 @@
 import React from 'react'
-import { getCars } from '../services/carService';
+import { getCars } from '../../services/carService';
 import './styles/filters.css'
 export const Filters = ({ carMakes, setCars, filters, setFilters, handleClose }) => {
     

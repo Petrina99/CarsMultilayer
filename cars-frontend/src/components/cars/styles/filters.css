@@ -1,13 +1,13 @@
-.add-edit-form {
+.filter-form {
+    flex-basis: 100%;
     display: flex;
     flex-wrap: wrap;
-    flex-basis: 55%;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
-.add-edit-form input {
-    flex-basis: 100%;
+.filter-form input{
+    flex-basis: 20%;
     border: 2px solid gray;
     border-radius: 5px;
     padding: 1em;
@@ -15,14 +15,18 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.submit-btn-div {
+.sort-div {
+    flex-basis: 48%;
+}
+
+.submit-btn-div-filter {
     flex-basis: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.submit-btn-div button {
-    flex-basis: 49%;
+.submit-btn-div-filter button {
+    flex-basis: 30%;
     cursor: pointer;
     background-color: black;
     color: white;
@@ -30,27 +34,6 @@
     border-radius: 5px;
     padding: 1em;
     margin-bottom: 20px;
-}
-
-.submit-btn-div button:hover {
-    background-color: darkgray;
-}
-
-.submit-btn-div a {
-    flex-basis: 48%;
-    cursor: pointer;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 1em;
-    margin-bottom: 20px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.submit-btn-div a:hover {
-    background-color: darkgray;
 }
 
 select {

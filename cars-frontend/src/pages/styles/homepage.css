@@ -1,0 +1,18 @@
+main {
+    display: flex;
+    flex-basis: 70%;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+main h1 {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+main a {
+    flex-basis: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
